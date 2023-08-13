@@ -3,6 +3,7 @@ package transaction
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/veljkomatic/be-homework/pkg/blockchain"
 )
@@ -38,7 +39,7 @@ func NewRepository(storage Storage) Repository {
 }
 
 func (r *repository) GetTransactions(ctx context.Context, address string) ([]*blockchain.Transaction, error) {
-	return r.storage.Get(ctx, address)
+	return r.storage.Get(ctx, NewAddressTransactionID(address).String())
 }
 
 func (r *repository) InsertTransactions(ctx context.Context, addressTransactions []*AddressTransaction) error {
@@ -57,7 +58,7 @@ func NewAddressTransactionID(
 	address string,
 ) AddressTransactionID {
 	return AddressTransactionID(
-		fmt.Sprintf("%s", address),
+		fmt.Sprintf("%s", strings.ToLower(address)),
 	)
 }
 
